@@ -11,7 +11,6 @@ let g:loaded_cursor_settings = 1
 
 " iTerm
 if $TERM_PROGRAM ==? 'iTerm.app'
-    " Different cursors for Insert Mode vs Normal Mode for iTerm
     if exists("$TMUX")
         let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
         try
@@ -34,9 +33,9 @@ elseif $TERM_PROGRAM ==? 'Kitty' || $TERM_PROGRAM ==? 'Alacritty' || $TERM_PROGR
     " 4 -> solid underscore
     " 5 -> blinking vertical bar
     " 6 -> solid vertical bar
-    let &t_SI = "\<Esc>[6 q"
+    let &t_SI = "\<Esc>[5 q"
     try
-        let &t_SR = "\<Esc>[4 q"
+        let &t_SR = "\<Esc>[3 q"
     catch
     endtry
     let &t_EI = "\<Esc>[1 q"
@@ -47,9 +46,9 @@ elseif $TERM_PROGRAM ==? 'Apple_Terminal'
     " 4 -> solid underscore
     " 5 -> blinking vertical bar
     " 6 -> solid vertical bar
-    let &t_SI .= "\e[6 q"
+    let &t_SI .= "\e[5 q"
     try
-        let &t_SR .= "\e[4 q"
+        let &t_SR .= "\e[3 q"
     catch
     endtry
     let &t_EI .= "\e[1 q"
