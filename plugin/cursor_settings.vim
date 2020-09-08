@@ -26,7 +26,7 @@ if $TERM_PROGRAM ==? 'iTerm.app'
         endtry
         let &t_EI = "\<Esc>]50;CursorShape=0\x7"
     endif
-elseif $TERM_PROGRAM ==? 'Kitty' || $TERM_PROGRAM ==? 'Alacritty' || $TERM_PROGRAM ==? 'VTE' || !empty($VTE_VERSION)
+elseif $TERM_PROGRAM ==? 'Kitty' || $TERM_PROGRAM ==? 'Alacritty' || $TERM_PROGRAM ==? 'WezTerm' || $TERM_PROGRAM ==? 'VTE' || !empty($VTE_VERSION)
     " 1 -> blinking block
     " 2 -> solid block
     " 3 -> blinking underscore
