@@ -4,13 +4,25 @@ endif
 
 let g:loaded_cursor_settings = 1
 
+function! s:autodetect_term_program() abort
+    if exists("$LC_TERMINAL")
+        return $LC_TERMINAL
+    elseif exists("$TERM_PROGRAM_NAME")
+        return $TERM_PROGRAM_NAME
+    else
+        return $TERM_PROGRAM
+    endif
+endfunction
+
+let s:term_program = s:autodetect_term_program()
+
 " Mode Settings
 " t_SI: INSERT mode
 " t_SR: REPLACE mode
 " t_EI: NORMAL mode (ELSE)
 
 " iTerm
-if $TERM_PROGRAM ==? 'iTerm.app'
+if s:term_program =~? 'iTerm'
     if exists("$TMUX")
         let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
         try
@@ -26,20 +38,7 @@ if $TERM_PROGRAM ==? 'iTerm.app'
         endtry
         let &t_EI = "\<Esc>]50;CursorShape=0\x7"
     endif
-elseif $TERM_PROGRAM =~? 'Kitty' || $TERM_PROGRAM =~? 'Alacritty' || $TERM_PROGRAM =~? 'WezTerm' || $TERM_PROGRAM ==? 'VTE' || !empty($VTE_VERSION)
-    " 1 -> blinking block
-    " 2 -> solid block
-    " 3 -> blinking underscore
-    " 4 -> solid underscore
-    " 5 -> blinking vertical bar
-    " 6 -> solid vertical bar
-    let &t_SI = "\<Esc>[5 q"
-    try
-        let &t_SR = "\<Esc>[3 q"
-    catch
-    endtry
-    let &t_EI = "\<Esc>[1 q"
-elseif $TERM_PROGRAM ==? 'Apple_Terminal'
+elseif s:term_program ==? 'Apple_Terminal'
     " 1 -> blinking block
     " 2 -> solid block
     " 3 -> blinking underscore
@@ -52,4 +51,17 @@ elseif $TERM_PROGRAM ==? 'Apple_Terminal'
     catch
     endtry
     let &t_EI .= "\e[1 q"
+elseif s:term_program =~? 'Kitty' || s:term_program =~? 'Alacritty' || s:term_program =~? 'WezTerm' || s:term_program ==? 'VTE' || !empty($VTE_VERSION)
+    " 1 -> blinking block
+    " 2 -> solid block
+    " 3 -> blinking underscore
+    " 4 -> solid underscore
+    " 5 -> blinking vertical bar
+    " 6 -> solid vertical bar
+    let &t_SI = "\<Esc>[5 q"
+    try
+        let &t_SR = "\<Esc>[3 q"
+    catch
+    endtry
+    let &t_EI = "\<Esc>[1 q"
 endif
