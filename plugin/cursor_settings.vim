@@ -15,7 +15,13 @@ function! s:autodetect_term_program() abort
 endfunction
 
 function! s:is_vte_compatible_terminal() abort
-    return s:term_program ==? 'VTE' || !empty($VTE_VERSION) || !empty($KONSOLE_VERSION)
+    return s:term_program =~? 'Kitty' || 
+                \ s:term_program =~? 'Alacritty' ||
+                \ s:term_program =~? 'WezTerm' ||
+                \ s:term_program =~? 'Rio' ||
+                \ s:term_program ==? 'VTE' ||
+                \ !empty($VTE_VERSION) ||
+                \ !empty($KONSOLE_VERSION)
 endfunction
 
 let s:term_program = s:autodetect_term_program()
@@ -55,7 +61,7 @@ elseif s:term_program ==? 'Apple_Terminal'
     catch
     endtry
     let &t_EI .= "\e[1 q"
-elseif s:term_program =~? 'Kitty' || s:term_program =~? 'Alacritty' || s:term_program =~? 'WezTerm' || s:term_program =~? 'Rio' || s:is_vte_compatible_terminal()
+elseif s:is_vte_compatible_terminal()
     " 1 -> blinking block
     " 2 -> solid block
     " 3 -> blinking underscore
