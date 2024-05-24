@@ -55,7 +55,7 @@ elseif s:term_program ==? 'Apple_Terminal'
     catch
     endtry
     let &t_EI .= "\e[1 q"
-elseif s:term_program =~? 'Kitty' || s:term_program =~? 'Alacritty' || s:term_program =~? 'WezTerm' || s:is_vte_compatible_terminal()
+elseif s:term_program =~? 'Kitty' || s:term_program =~? 'Alacritty' || s:term_program =~? 'WezTerm' || s:term_program =~? 'Rio' || s:is_vte_compatible_terminal()
     " 1 -> blinking block
     " 2 -> solid block
     " 3 -> blinking underscore
