@@ -15,7 +15,7 @@ function! s:autodetect_term_program() abort
 endfunction
 
 function! s:is_vte_compatible_terminal() abort
-    return s:term_program =~? 'Alacritty\|Kitty\|Wezterm\|Rio\|VTE' ||
+    return s:term_program =~? 'Apple_Terminal\|Alacritty\|Kitty\|Wezterm\|Rio\|VTE\|tmux' ||
                 \ !empty($VTE_VERSION) ||
                 \ !empty($KONSOLE_VERSION)
 endfunction
@@ -27,8 +27,20 @@ let s:term_program = s:autodetect_term_program()
 " t_SR: REPLACE mode
 " t_EI: NORMAL mode (ELSE)
 
-" iTerm
-if s:term_program =~? 'iTerm'
+if s:is_vte_compatible_terminal() || exists("$TMUX")
+    " 1 -> blinking block
+    " 2 -> solid block
+    " 3 -> blinking underscore
+    " 4 -> solid underscore
+    " 5 -> blinking vertical bar
+    " 6 -> solid vertical bar
+    let &t_SI .= "\e[5 q"
+    try
+        let &t_SR .= "\e[3 q"
+    catch
+    endtry
+    let &t_EI .= "\e[1 q"
+elseif s:term_program =~? 'iTerm'
     if exists("$TMUX")
         let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
         try
@@ -44,17 +56,4 @@ if s:term_program =~? 'iTerm'
         endtry
         let &t_EI = "\<Esc>]50;CursorShape=0\x7"
     endif
-elseif s:term_program ==? 'Apple_Terminal' || s:is_vte_compatible_terminal()
-    " 1 -> blinking block
-    " 2 -> solid block
-    " 3 -> blinking underscore
-    " 4 -> solid underscore
-    " 5 -> blinking vertical bar
-    " 6 -> solid vertical bar
-    let &t_SI .= "\e[5 q"
-    try
-        let &t_SR .= "\e[3 q"
-    catch
-    endtry
-    let &t_EI .= "\e[1 q"
 endif
